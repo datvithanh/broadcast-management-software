@@ -1,0 +1,15 @@
+version: '3'
+
+services: 
+  postgres:
+    image: postgres:10.3
+    volumes: 
+      - postgresData:/var/lib/postgres
+    environment:
+        - POSTGRES_DB=default
+        - POSTGRES_USER=default
+        - POSTGRES_PASSWORD=secret
+    ports:
+      - "54321:5432"
+volumes:
+  postgresData:
