@@ -1,3 +1,4 @@
+package DTO;
 import javax.swing.*;
 
 public class FirstSwingExample {

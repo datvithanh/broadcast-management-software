@@ -1,3 +1,4 @@
+package DTO;
 
 public class Song {
 	private int id;
