@@ -1,9 +1,15 @@
-CREATE OR REPLACE FUNCTION insert_broadcasts(_name VARCHAR(255), _broadcast_at DATE)
-  RETURNS VOID
+CREATE FUNCTION insert_broadcasts(_name character varying, _broadcast_at timestamp without time zone)
+  RETURNS void
 LANGUAGE plpgsql
-AS
-$$
+AS $$
 BEGIN
+  IF (_broadcast_at = '1970-01-01 00:00:01')
+  THEN
+    INSERT INTO broadcasts (name)
+    VALUES (_name);
+    RETURN;
+  END IF;
+
   INSERT INTO broadcasts (name, broadcast_at)
   VALUES (_name, _broadcast_at);
 END
@@ -72,6 +78,24 @@ BEGIN
   RETURN QUERY SELECT * FROM songs;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_requests()
+  RETURNS TABLE(id integer, user_name character varying, song_name character varying, composer_name character varying, singer_name character varying, resolved boolean)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY (
+  SELECT requests.id, requests.user_name, songs.name as song_name, songs.composer as composer_name, songs.singer as singer_name, requests.resolved
+  FROM (
+          SELECT requests.*, users.name as user_name
+          FROM requests LEFT JOIN users ON requests.user_id = users.id
+       ) as requests LEFT JOIN songs ON requests.song_id = songs.id
+  );
+
+END;
+$$;
+
+
 
 
 

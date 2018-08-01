@@ -3,8 +3,8 @@ CREATE  TABLE  IF NOT EXISTS broadcasts (
   CONSTRAINT broadcasts_pkey
   PRIMARY KEY,
   name VARCHAR(255) NOT NULL ,
-  broadcast_at DATE,
-  created_at DATE default CURRENT_DATE
+  broadcast_at TIMESTAMP(0) DEFAULT current_timestamp,
+  created_at DATE default current_date
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -55,5 +55,3 @@ CREATE TABLE IF NOT EXISTS broadcast_request (
   order_number INTEGER NOT NULL,
   created_at DATE default CURRENT_DATE
 );
-
-
