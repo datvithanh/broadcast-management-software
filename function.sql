@@ -64,4 +64,15 @@ BEGIN
   VALUES (_broadcast_id, _request_id, _order_number);
 END $$;
 
+CREATE OR REPLACE FUNCTION get_songs()
+  RETURNS TABLE(id integer, name character varying, composer character varying, singer character varying, released_at date, created_at date)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY SELECT * FROM songs;
+END;
+$$;
+
+
+
 

@@ -20,12 +20,11 @@ public class DataProvider{
             System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Adlasldl");
         }
  
         return conn;
     }
- 
+    
     /**
      * @param args the command line arguments
      */

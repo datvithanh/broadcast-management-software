@@ -55,3 +55,5 @@ CREATE TABLE IF NOT EXISTS broadcast_request (
   order_number INTEGER NOT NULL,
   created_at DATE default CURRENT_DATE
 );
+
+
