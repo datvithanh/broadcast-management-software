@@ -1,11 +1,14 @@
 package DTO;
 
+import java.sql.ResultSet;
+
 public class Song {
 	private int id;
 	private String name;
 	private String composer;
 	private String singer;
-
+	private ResultSet songSet;
+	
 	public Song() {}
 
 	public Song(int id, String name, String composer, String singer) {
@@ -43,5 +46,9 @@ public class Song {
 
  	public String getSinger() {
  		return singer;
+ 	}
+ 	
+ 	public void setSongSet(ResultSet songSet) {
+ 		this.songSet = songSet;
  	}
 }
