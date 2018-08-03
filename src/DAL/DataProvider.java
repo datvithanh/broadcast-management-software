@@ -2,7 +2,6 @@ package DAL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
  
@@ -29,20 +28,13 @@ public class DataProvider{
         return conn;
     }
     
-    public ResultSet getSongs(Connection conn) throws SQLException {
+    public ResultSet getSongs() throws SQLException {
+    	DataProvider app = new DataProvider();
+        Connection conn = app.connect();
     	String query = "select * from get_songs()" ;
         Statement stmt = conn.createStatement() ;
         ResultSet rs = stmt.executeQuery(query) ;
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int columnsNumber = rsmd.getColumnCount();
-        while (rs.next()) {
-            for (int i = 1; i <= columnsNumber; i++) {
-                if (i > 1) System.out.print(",  ");
-                String columnValue = rs.getString(i);
-                System.out.print(columnValue + " " + rsmd.getColumnName(i));
-            }
-            System.out.println("");
-        }
+        
         return rs;
     }
     /**
@@ -51,7 +43,6 @@ public class DataProvider{
      */
     public static void main(String[] args) throws SQLException {
     	DataProvider app = new DataProvider();
-        Connection conn = app.connect();
-        app.getSongs(conn);
+        app.getSongs();
     }
 }
