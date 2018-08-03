@@ -1,14 +1,5 @@
 package DTO;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import DAL.DataProvider;
-
 public class Song {
 	private String id;
 	private String name;
@@ -22,7 +13,6 @@ public class Song {
 		this.name = name;
 		this.composer = composer;
 		this.singer = singer;
-
 	}
 
 	public void setId(String string) {
@@ -54,26 +44,21 @@ public class Song {
  		return singer;
  	}
  	
- 	public Object[][] getSongArray() throws SQLException {
- 		DataProvider dp = new DataProvider();
- 		ResultSet rs = dp.getSongs();
-
- 		ArrayList<Song> songArray = new ArrayList<Song>();
- 		
- 		ResultSetMetaData rsmd = rs.getMetaData();
-        while (rs.next()) {
-        	Song song = new Song(rs.getString("id"), rs.getString("name"), rs.getString("composer"), rs.getString("singer"));
-        	songArray.add(song);
-        	
-//            for (int i = 1; i <= columnsNumber; i++) {
-//                if (i > 1) System.out.print(",  ");
-//                String columnValue = rs.getString(id);
-//                System.out.print(columnValue + " " + rsmd.getColumnName(i));
-//            }
-//            System.out.println("");
-        }
-      
-        
-		return songArray.toArray();
- 	}
+// 	public ArrayList<Song> getSongArray() throws SQLException {
+// 		DataProvider dp = new DataProvider();
+// 		ResultSet rs = dp.getSongs();
+//
+// 		ArrayList<Song> songArray = new ArrayList<Song>();
+// 		
+// 		ResultSetMetaData rsmd = rs.getMetaData();
+//        while (rs.next()) {
+//        	Song song = new Song(rs.getString("id"), rs.getString("name"), rs.getString("composer"), rs.getString("singer"));
+//        	songArray.add(song);   
+//            System.out.println(song.getName());
+//
+//        }
+//      
+//        
+//		return songArray;
+// 	}
 }

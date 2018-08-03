@@ -2,27 +2,34 @@ package DTO;
 
 public class Request {
 		
-	private int id;
+	private String id;
 	private int userId;
 	private int songId;
 	private boolean resolved;
-	private String createAt;
+	private String createdAt;
+	private String userName;
+	private String songName;
+	private String composerName;
+	private String singerName;
 
-	public Request(int id, int userId, int songId, boolean resolved, String createAt) {
+
+	public Request(String id, String userName, String songName, String composerName, String singerName, String createdAt, boolean resolved) {
 		
 		this.id = id;
-		this.userId = userId;
-		this.songId = songId;
+		this.userName = userName;
+		this.songName = songName;
+		this.composerName = composerName;
+		this.singerName = singerName;
+		this.setCreatedAt(createdAt);
 		this.resolved = resolved;
-		this.createAt = createAt;
 		
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -50,12 +57,44 @@ public class Request {
 		this.resolved = resolved;
 	}
 
-	public String getCreateAt() {
-		return createAt;
+	public String getSingerName() {
+		return singerName;
 	}
 
-	public void setCreateAt(String createAt) {
-		this.createAt = createAt;
+	public void setSingerName(String singerName) {
+		this.singerName = singerName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getComposerName() {
+		return composerName;
+	}
+
+	public void setComposerName(String composerName) {
+		this.composerName = composerName;
+	}
+
+	public String getSongName() {
+		return songName;
+	}
+
+	public void setSongName(String songName) {
+		this.songName = songName;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
 	}
 	
 	

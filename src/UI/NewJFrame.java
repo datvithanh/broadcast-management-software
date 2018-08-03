@@ -1,13 +1,56 @@
 package UI;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
+import DAL.DataProvider;
+import DTO.Request;
 import DTO.Song;
 
 public class NewJFrame extends javax.swing.JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public NewJFrame() {
 		initComponents();
+		showSong();
+		showRequest();
+	}
+
+	public void showSong() {
+		ArrayList<Song> songList = new DataProvider().songList();
+		DefaultTableModel model = (DefaultTableModel) jTableSong.getModel();
+		Object[] row = new Object[4];
+		System.out.println(songList.size());
+
+		for (int i = 0; i < songList.size(); i++) {
+			row[0] = songList.get(i).getId();
+			row[1] = songList.get(i).getName();
+			row[2] = songList.get(i).getComposer();
+			row[3] = songList.get(i).getSinger();
+			model.addRow(row);
+		}
+	}
+	
+	public void showRequest() {
+		ArrayList<Request> requestList = new DataProvider().requestList();
+		DefaultTableModel model = (DefaultTableModel) jTableRequest.getModel();
+		Object[] row = new Object[6];
+		System.out.println(requestList.size());
+
+		for (int i = 0; i < requestList.size(); i++) {
+			row[0] = requestList.get(i).getId();
+			row[1] = requestList.get(i).getUserName();
+			row[2] = requestList.get(i).getCreatedAt();
+			row[3] = requestList.get(i).getSongName();
+			row[4] = requestList.get(i).getSingerName();
+			row[5] = requestList.get(i).getComposerName();
+			model.addRow(row);
+		}
 	}
 
 	private void initComponents() {
@@ -26,7 +69,7 @@ public class NewJFrame extends javax.swing.JFrame {
 		jPanel8 = new javax.swing.JPanel();
 		jPanel9 = new javax.swing.JPanel();
 		jScrollPane2 = new javax.swing.JScrollPane();
-		jTable2 = new javax.swing.JTable();
+		jTableSong = new javax.swing.JTable();
 		jButton3 = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		jPanel10 = new javax.swing.JPanel();
@@ -51,7 +94,7 @@ public class NewJFrame extends javax.swing.JFrame {
 		jPanel35 = new javax.swing.JPanel();
 		jPanel36 = new javax.swing.JPanel();
 		jScrollPane13 = new javax.swing.JScrollPane();
-		jTable13 = new javax.swing.JTable();
+		jTableRequest = new javax.swing.JTable();
 		jButton16 = new javax.swing.JButton();
 		jLabel15 = new javax.swing.JLabel();
 		jPanel37 = new javax.swing.JPanel();
@@ -180,20 +223,18 @@ public class NewJFrame extends javax.swing.JFrame {
 		jPanel8.setPreferredSize(new java.awt.Dimension(1127, 601));
 
 		jPanel9.setPreferredSize(new java.awt.Dimension(772, 572));
-		Song song = new Song();
-		Object[][] songArray = null;
-		try {
-			songArray = song.getSongArray();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		jTable2.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null, null, null }, { null, null, null, null, null },
-						{ null, null, null, null, null }, { null, null, null, null, null } },
+		// Song song = new Song();
+		// ArrayList<Song> songArray = null;
+		// try {
+		// songArray = song.getSongArray();
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		jTableSong.setModel(new javax.swing.table.DefaultTableModel(null,
 				new String[] { "STT", "Tên bài hát", "Tên nhạc sĩ", "Tên ca sĩ" }));
-		jTable2.setAutoscrolls(false);
-		jScrollPane2.setViewportView(jTable2);
+		jTableSong.setAutoscrolls(false);
+		jScrollPane2.setViewportView(jTableSong);
 
 		jButton3.setText("Xóa");
 
@@ -413,12 +454,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
 		jPanel36.setPreferredSize(new java.awt.Dimension(772, 572));
 
-		jTable13.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null, null, null }, { null, null, null, null, null },
-						{ null, null, null, null, null }, { null, null, null, null, null } },
-				new String[] { "STT", "Tên bài hát", "Ngày yêu cầu", "Ca sĩ", "Nhạc sĩ" }));
-		jTable13.setAutoscrolls(false);
-		jScrollPane13.setViewportView(jTable13);
+		jTableRequest.setModel(new javax.swing.table.DefaultTableModel(
+				null,
+				new String[] { "STT", "Người yêu cầu", "Ngày yêu cầu", "Tên bài hát", "Ca sĩ", "Nhạc sĩ" }));
+		jTableRequest.setAutoscrolls(false);
+		jScrollPane13.setViewportView(jTableRequest);
 
 		jButton16.setText("Xóa");
 
@@ -864,11 +904,11 @@ public class NewJFrame extends javax.swing.JFrame {
 	private javax.swing.JScrollPane jScrollPane4;
 	private javax.swing.JTabbedPane jTabbedPane6;
 	private javax.swing.JTable jTable1;
-	private javax.swing.JTable jTable13;
+	private javax.swing.JTable jTableRequest;
 	private javax.swing.JTable jTable14;
 	private javax.swing.JTable jTable15;
 	private javax.swing.JTable jTable16;
-	private javax.swing.JTable jTable2;
+	private javax.swing.JTable jTableSong;
 	private javax.swing.JTextArea jTextArea1;
 	private javax.swing.JTextArea jTextArea2;
 	private javax.swing.JTextField jTextField1;

@@ -1,4 +1,4 @@
-CREATE FUNCTION insert_broadcasts(_name character varying, _broadcast_at timestamp without time zone)
+CREATE OR REPLACE FUNCTION insert_broadcasts(_name character varying, _broadcast_at timestamp without time zone)
   RETURNS void
 LANGUAGE plpgsql
 AS $$
@@ -80,12 +80,12 @@ END;
 $$;
 
 CREATE OR REPLACE FUNCTION get_requests()
-  RETURNS TABLE(id integer, user_name character varying, song_name character varying, composer_name character varying, singer_name character varying, resolved boolean)
+  RETURNS TABLE(id integer, user_name character varying, created_at DATE, song_name character varying, singer_name character varying, composer_name character varying, resolved boolean)
 LANGUAGE plpgsql
 AS $$
 BEGIN
   RETURN QUERY (
-  SELECT requests.id, requests.user_name, songs.name as song_name, songs.composer as composer_name, songs.singer as singer_name, requests.resolved
+  SELECT requests.id, requests.user_name, requests.created_at as created_at, songs.name as song_name, songs.singer as singer_name, songs.composer as composer_name, requests.resolved
   FROM (
           SELECT requests.*, users.name as user_name
           FROM requests LEFT JOIN users ON requests.user_id = users.id
