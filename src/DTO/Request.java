@@ -1,20 +1,33 @@
 package DTO;
 
 public class Request {
-		
+
 	private String id;
-	private int userId;
-	private int songId;
+	private String userId;
+	private String songId;
 	private boolean resolved;
 	private String createdAt;
 	private String userName;
 	private String songName;
 	private String composerName;
 	private String singerName;
+	private String message;
+	private String exception;
+	
+	public Request(String userId, String songId, String message) {
+		this.userId = userId;
+		this.songId = userId;
+		this.message = message;
+	}
+	
+	public Request(String userName, String songId, String exception, int i) {
+		this.userName = userName;
+		this.songId = songId;
+		this.exception = exception;
+	}
 
-
-	public Request(String id, String userName, String songName, String composerName, String singerName, String createdAt, boolean resolved) {
-		
+	public Request(String id, String userName, String songName, String composerName, String singerName,
+			String createdAt, boolean resolved) {
 		this.id = id;
 		this.userName = userName;
 		this.songName = songName;
@@ -22,7 +35,6 @@ public class Request {
 		this.singerName = singerName;
 		this.setCreatedAt(createdAt);
 		this.resolved = resolved;
-		
 	}
 
 	public String getId() {
@@ -33,19 +45,19 @@ public class Request {
 		this.id = id;
 	}
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public int getSongId() {
+	public String getSongId() {
 		return songId;
 	}
 
-	public void setSongId(int songId) {
+	public void setSongId(String songId) {
 		this.songId = songId;
 	}
 
@@ -96,9 +108,21 @@ public class Request {
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	
-	
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getException() {
+		return exception;
+	}
+
+	public void setException(String exception) {
+		this.exception = exception;
+	}
+
 }
-
-

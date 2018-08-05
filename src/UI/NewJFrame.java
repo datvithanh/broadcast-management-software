@@ -1,5 +1,7 @@
 package UI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
@@ -7,8 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import DAL.DataProvider;
 import DTO.Request;
 import DTO.Song;
+import DTO.User;
 
-public class NewJFrame extends javax.swing.JFrame {
+public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 
 	/**
 	 * 
@@ -17,38 +20,84 @@ public class NewJFrame extends javax.swing.JFrame {
 
 	public NewJFrame() {
 		initComponents();
-		showSong();
-		showRequest();
+		showSongs();
+		showRequests();
+		showFavoriteSongs();
+		showUnresolvedSongs();
+		showRequestExceptions();
+	}
+	
+	public void showRequestExceptions() {
+		ArrayList<Request> requestList = new DataProvider().requestExceptionList();
+		DefaultTableModel model = (DefaultTableModel) jTableRequestExceptions.getModel();
+		Object[] row = new Object[3];
+		model.setNumRows(0);
+
+		for (int i = 0; i < requestList.size(); i++) {
+			row[0] = requestList.get(i).getUserName();
+			row[1] = "SO" + requestList.get(i).getSongId();
+			row[2] = requestList.get(i).getException();
+			model.addRow(row);
+		}
 	}
 
-	public void showSong() {
+	public void showSongs() {
 		ArrayList<Song> songList = new DataProvider().songList();
 		DefaultTableModel model = (DefaultTableModel) jTableSong.getModel();
+		model.setNumRows(0);
 		Object[] row = new Object[4];
-		System.out.println(songList.size());
 
 		for (int i = 0; i < songList.size(); i++) {
-			row[0] = songList.get(i).getId();
+			row[0] = "SO" + songList.get(i).getId();
 			row[1] = songList.get(i).getName();
 			row[2] = songList.get(i).getComposer();
 			row[3] = songList.get(i).getSinger();
 			model.addRow(row);
 		}
 	}
-	
-	public void showRequest() {
+
+	public void showRequests() {
 		ArrayList<Request> requestList = new DataProvider().requestList();
 		DefaultTableModel model = (DefaultTableModel) jTableRequest.getModel();
 		Object[] row = new Object[6];
-		System.out.println(requestList.size());
+		model.setNumRows(0);
 
 		for (int i = 0; i < requestList.size(); i++) {
-			row[0] = requestList.get(i).getId();
+			row[0] = i + 1;
 			row[1] = requestList.get(i).getUserName();
 			row[2] = requestList.get(i).getCreatedAt();
 			row[3] = requestList.get(i).getSongName();
 			row[4] = requestList.get(i).getSingerName();
 			row[5] = requestList.get(i).getComposerName();
+			model.addRow(row);
+		}
+	}
+
+	public void showFavoriteSongs() {
+		ArrayList<Song> favoriteSongList = new DataProvider().favoriteSongList();
+		DefaultTableModel model = (DefaultTableModel) jTableFavoriteSong.getModel();
+		Object[] row = new Object[4];
+		model.setNumRows(0);
+
+		for (int i = 0; i < favoriteSongList.size(); i++) {
+			row[0] = i + 1;
+			row[1] = "SO" + favoriteSongList.get(i).getId();
+			row[2] = favoriteSongList.get(i).getName();
+			row[3] = favoriteSongList.get(i).getRequestCount();
+			model.addRow(row);
+		}
+	}
+
+	public void showUnresolvedSongs() {
+		ArrayList<Song> unresolvedSongList = new DataProvider().unresolvedSongList();
+		DefaultTableModel model = (DefaultTableModel) jTableUnresolvedSong.getModel();
+		Object[] row = new Object[4];
+		model.setNumRows(0);
+		for (int i = 0; i < unresolvedSongList.size(); i++) {
+			row[0] = i + 1;
+			row[1] = "SO" + unresolvedSongList.get(i).getId();
+			row[2] = unresolvedSongList.get(i).getName();
+			row[3] = unresolvedSongList.get(i).getRequestCount();
 			model.addRow(row);
 		}
 	}
@@ -63,68 +112,68 @@ public class NewJFrame extends javax.swing.JFrame {
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTable1 = new javax.swing.JTable();
 		jPanel7 = new javax.swing.JPanel();
-		jButton1 = new javax.swing.JButton();
-		jButton2 = new javax.swing.JButton();
+		jButtonPlayBroadcast = new javax.swing.JButton("jButtonPlayBroadcast");
+		jButton2 = new javax.swing.JButton("jButton2");
 		jPanel2 = new javax.swing.JPanel();
 		jPanel8 = new javax.swing.JPanel();
 		jPanel9 = new javax.swing.JPanel();
 		jScrollPane2 = new javax.swing.JScrollPane();
 		jTableSong = new javax.swing.JTable();
-		jButton3 = new javax.swing.JButton();
+		jButtonDeleteSong = new javax.swing.JButton("jButtonDeleteSong");
 		jLabel2 = new javax.swing.JLabel();
 		jPanel10 = new javax.swing.JPanel();
 		jLabel3 = new javax.swing.JLabel();
 		jPanel11 = new javax.swing.JPanel();
 		jLabel8 = new javax.swing.JLabel();
-		jTextField4 = new javax.swing.JTextField();
+		jTextFieldSongCode = new javax.swing.JTextField();
 		jLabel20 = new javax.swing.JLabel();
-		jTextField5 = new javax.swing.JTextField();
+		jTextFieldSongName = new javax.swing.JTextField();
 		jLabel9 = new javax.swing.JLabel();
-		jTextField6 = new javax.swing.JTextField();
+		jTextFieldComposerName = new javax.swing.JTextField();
 		jLabel10 = new javax.swing.JLabel();
-		jTextField7 = new javax.swing.JTextField();
+		jTextFieldSingerName = new javax.swing.JTextField();
 		jLabel11 = new javax.swing.JLabel();
-		jTextField8 = new javax.swing.JTextField();
-		jButton5 = new javax.swing.JButton();
+		jTextFieldLink = new javax.swing.JTextField();
+		jButton5 = new javax.swing.JButton("jButton5");
 		jLabel12 = new javax.swing.JLabel();
 		jScrollPane4 = new javax.swing.JScrollPane();
 		jTextArea2 = new javax.swing.JTextArea();
-		jButton4 = new javax.swing.JButton();
+		jButtonAddSong = new javax.swing.JButton("jButtonAddSong");
 		jPanel3 = new javax.swing.JPanel();
 		jPanel35 = new javax.swing.JPanel();
 		jPanel36 = new javax.swing.JPanel();
 		jScrollPane13 = new javax.swing.JScrollPane();
 		jTableRequest = new javax.swing.JTable();
-		jButton16 = new javax.swing.JButton();
+		jButtonDeleteRequest = new javax.swing.JButton("jButtonDeleteRequest");
 		jLabel15 = new javax.swing.JLabel();
 		jPanel37 = new javax.swing.JPanel();
 		jLabel16 = new javax.swing.JLabel();
 		jPanel40 = new javax.swing.JPanel();
 		jLabel19 = new javax.swing.JLabel();
-		jTextField1 = new javax.swing.JTextField();
+		jTextFieldRequester = new javax.swing.JTextField();
 		jLabel4 = new javax.swing.JLabel();
-		jTextField2 = new javax.swing.JTextField();
+		jTextFieldSongId = new javax.swing.JTextField();
 		jLabel6 = new javax.swing.JLabel();
-		jTextField3 = new javax.swing.JTextField();
+		jTextFieldRequesterPhone = new javax.swing.JTextField();
 		jLabel7 = new javax.swing.JLabel();
 		jScrollPane3 = new javax.swing.JScrollPane();
-		jTextArea1 = new javax.swing.JTextArea();
-		jButton17 = new javax.swing.JButton();
+		jTextAreaRequesterMessage = new javax.swing.JTextArea();
+		jButtonAddRequest = new javax.swing.JButton("jButtonAddRequest");
 		jPanel4 = new javax.swing.JPanel();
 		jPanel14 = new javax.swing.JPanel();
 		jScrollPane14 = new javax.swing.JScrollPane();
-		jTable14 = new javax.swing.JTable();
+		jTableUnresolvedSong = new javax.swing.JTable();
 		jPanel15 = new javax.swing.JPanel();
 		jLabel5 = new javax.swing.JLabel();
 		jScrollPane15 = new javax.swing.JScrollPane();
-		jTable15 = new javax.swing.JTable();
+		jTableFavoriteSong = new javax.swing.JTable();
 		jPanel34 = new javax.swing.JPanel();
 		jLabel17 = new javax.swing.JLabel();
 		jScrollPane16 = new javax.swing.JScrollPane();
-		jTable16 = new javax.swing.JTable();
+		jTableRequestExceptions = new javax.swing.JTable();
 		jPanel38 = new javax.swing.JPanel();
 		jLabel18 = new javax.swing.JLabel();
-		jButton6 = new javax.swing.JButton();
+		jButton6 = new javax.swing.JButton("jButton6");
 		jMenuBar1 = new javax.swing.JMenuBar();
 		jMenu1 = new javax.swing.JMenu();
 		jMenuItem1 = new javax.swing.JMenuItem();
@@ -148,7 +197,7 @@ public class NewJFrame extends javax.swing.JFrame {
 		jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
 		jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-		jLabel1.setText("DANH SÁCH PHÁT");
+		jLabel1.setText("PHÁT SÓNG");
 
 		javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
 		jPanel6.setLayout(jPanel6Layout);
@@ -165,21 +214,23 @@ public class NewJFrame extends javax.swing.JFrame {
 				new String[] { "Số thứ tự", "Tên bài hát", "Ngày phát", "Ca sĩ", "Nhạc sĩ" }));
 		jScrollPane1.setViewportView(jTable1);
 
-		jButton1.setText("PLAY");
+		jButtonPlayBroadcast.setText("PLAY");
+		jButtonPlayBroadcast.addActionListener(this);
 
 		jButton2.setText("NEXT");
+		jButton2.addActionListener(this);
 
 		javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
 		jPanel7.setLayout(jPanel7Layout);
 		jPanel7Layout.setHorizontalGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel7Layout.createSequentialGroup().addContainerGap()
-						.addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76,
+						.addComponent(jButtonPlayBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 76,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(18, 18, 18).addComponent(jButton2)
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-						.addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+						.addComponent(jButtonPlayBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
 						.addComponent(jButton2)));
 
 		javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -232,11 +283,12 @@ public class NewJFrame extends javax.swing.JFrame {
 		// e.printStackTrace();
 		// }
 		jTableSong.setModel(new javax.swing.table.DefaultTableModel(null,
-				new String[] { "STT", "Tên bài hát", "Tên nhạc sĩ", "Tên ca sĩ" }));
+				new String[] { "Mã bài ", "Tên bài hát", "Tên nhạc sĩ", "Tên ca sĩ" }));
 		jTableSong.setAutoscrolls(false);
 		jScrollPane2.setViewportView(jTableSong);
 
-		jButton3.setText("Xóa");
+		jButtonDeleteSong.setText("Xóa");
+		jButtonDeleteSong.addActionListener(this);
 
 		jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel2.setText("DANH SÁCH BÀI HÁT");
@@ -257,16 +309,18 @@ public class NewJFrame extends javax.swing.JFrame {
 												.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 														jPanel9Layout.createSequentialGroup().addComponent(jLabel2)
 																.addGap(262, 262, 262))
-												.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout
-														.createSequentialGroup()
-														.addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE,
-																113, javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addContainerGap()))))));
+												.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+														jPanel9Layout.createSequentialGroup()
+																.addComponent(jButtonDeleteSong,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 113,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addContainerGap()))))));
 		jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel9Layout.createSequentialGroup().addContainerGap().addComponent(jLabel2)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jScrollPane2)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton3,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(jButtonDeleteSong, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap()));
 
 		jPanel10.setPreferredSize(new java.awt.Dimension(315, 575));
@@ -280,17 +334,17 @@ public class NewJFrame extends javax.swing.JFrame {
 		jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel8.setText("Tên bài hát:");
 
-		jTextField4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldSongCode.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel20.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel20.setText("Mã bài hát:");
 
-		jTextField5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldSongName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel9.setText("Tên nhạc sĩ:");
 
-		jTextField6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldComposerName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel10.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel10.setText("Tên ca sĩ:");
@@ -298,9 +352,10 @@ public class NewJFrame extends javax.swing.JFrame {
 		jLabel11.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel11.setText("Đường dẫn:");
 
-		jTextField8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+		jTextFieldLink.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
 		jButton5.setText("...");
+		jButton5.addActionListener(this);
 
 		jLabel12.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel12.setText("Ghi chú:");
@@ -335,16 +390,16 @@ public class NewJFrame extends javax.swing.JFrame {
 										.addGap(18, 18, 18)
 										.addGroup(jPanel11Layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-												.addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 170,
-														Short.MAX_VALUE)
-												.addComponent(jTextField6).addComponent(jTextField5)
-												.addComponent(jTextField4)))
+												.addComponent(jTextFieldSingerName,
+														javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+												.addComponent(jTextFieldComposerName).addComponent(jTextFieldSongName)
+												.addComponent(jTextFieldSongCode)))
 								.addGroup(jPanel11Layout.createSequentialGroup().addGap(0, 5, Short.MAX_VALUE)
 										.addGroup(jPanel11Layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout
 														.createSequentialGroup()
-														.addComponent(jTextField8,
+														.addComponent(jTextFieldLink,
 																javax.swing.GroupLayout.PREFERRED_SIZE, 223,
 																javax.swing.GroupLayout.PREFERRED_SIZE)
 														.addPreferredGap(
@@ -359,25 +414,27 @@ public class NewJFrame extends javax.swing.JFrame {
 				.addGroup(jPanel11Layout.createSequentialGroup().addGap(28, 28, 28)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(jLabel20)
-								.addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jTextFieldSongCode, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel8).addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabel8)
+								.addComponent(jTextFieldSongName, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel9).addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabel9)
+								.addComponent(jTextFieldComposerName, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel10).addComponent(jTextField7,
+								.addComponent(jLabel10).addComponent(jTextFieldSingerName,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18).addComponent(jLabel11)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jTextFieldLink, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(jButton5))
 						.addGap(18, 18, 18).addComponent(jLabel12)
@@ -385,10 +442,11 @@ public class NewJFrame extends javax.swing.JFrame {
 						.addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
 						.addContainerGap()));
 
-		jButton4.setText("Thêm");
-		jButton4.setMaximumSize(new java.awt.Dimension(55, 25));
-		jButton4.setMinimumSize(new java.awt.Dimension(55, 25));
-		jButton4.setPreferredSize(new java.awt.Dimension(55, 25));
+		jButtonAddSong.setText("Thêm");
+		jButtonAddSong.addActionListener(this);
+		jButtonAddSong.setMaximumSize(new java.awt.Dimension(55, 25));
+		jButtonAddSong.setMinimumSize(new java.awt.Dimension(55, 25));
+		jButtonAddSong.setPreferredSize(new java.awt.Dimension(55, 25));
 
 		javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
 		jPanel10.setLayout(jPanel10Layout);
@@ -401,11 +459,11 @@ public class NewJFrame extends javax.swing.JFrame {
 										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 												jPanel10Layout.createSequentialGroup().addComponent(jLabel3).addGap(72,
 														72, 72))
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-												jPanel10Layout.createSequentialGroup()
-														.addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE,
-																113, javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addContainerGap())))
+										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout
+												.createSequentialGroup()
+												.addComponent(jButtonAddSong, javax.swing.GroupLayout.PREFERRED_SIZE,
+														113, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addContainerGap())))
 						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 								jPanel10Layout
 										.createSequentialGroup().addComponent(jPanel11,
@@ -415,8 +473,9 @@ public class NewJFrame extends javax.swing.JFrame {
 				.addGroup(jPanel10Layout.createSequentialGroup().addContainerGap().addComponent(jLabel3)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton4,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(jButtonAddSong, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap()));
 
 		javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -454,13 +513,13 @@ public class NewJFrame extends javax.swing.JFrame {
 
 		jPanel36.setPreferredSize(new java.awt.Dimension(772, 572));
 
-		jTableRequest.setModel(new javax.swing.table.DefaultTableModel(
-				null,
+		jTableRequest.setModel(new javax.swing.table.DefaultTableModel(null,
 				new String[] { "STT", "Người yêu cầu", "Ngày yêu cầu", "Tên bài hát", "Ca sĩ", "Nhạc sĩ" }));
 		jTableRequest.setAutoscrolls(false);
 		jScrollPane13.setViewportView(jTableRequest);
 
-		jButton16.setText("Xóa");
+		jButtonDeleteRequest.setText("Xóa");
+		jButtonDeleteRequest.addActionListener(this);
 
 		jLabel15.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel15.setText("DANH SÁCH YÊU CẦU");
@@ -475,16 +534,19 @@ public class NewJFrame extends javax.swing.JFrame {
 								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 										jPanel36Layout.createSequentialGroup().addGap(0, 261, Short.MAX_VALUE)
 												.addComponent(jLabel15).addGap(254, 254, 254))))
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jButton16,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap()));
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+						jPanel36Layout.createSequentialGroup()
+								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jButtonDeleteRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 113,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addContainerGap()));
 		jPanel36Layout.setVerticalGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel36Layout.createSequentialGroup().addContainerGap().addComponent(jLabel15)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton16,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(jButtonDeleteRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap()));
 
 		jPanel37.setPreferredSize(new java.awt.Dimension(315, 575));
@@ -495,26 +557,26 @@ public class NewJFrame extends javax.swing.JFrame {
 		jPanel40.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
 		jLabel19.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-		jLabel19.setText("Người yêu cầu:");
+		jLabel19.setText("Người yêu cầu*");
 
-		jTextField1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldRequester.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-		jLabel4.setText("Mã bài hát:");
+		jLabel4.setText("Mã bài hát*");
 
-		jTextField2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldSongId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-		jLabel6.setText("Số điện thoại");
+		jLabel6.setText("Số điện thoại*");
 
-		jTextField3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		jTextFieldRequesterPhone.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
 		jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel7.setText("Lời nhắn:");
 
-		jTextArea1.setColumns(20);
-		jTextArea1.setRows(5);
-		jScrollPane3.setViewportView(jTextArea1);
+		jTextAreaRequesterMessage.setColumns(20);
+		jTextAreaRequesterMessage.setRows(5);
+		jScrollPane3.setViewportView(jTextAreaRequesterMessage);
 
 		javax.swing.GroupLayout jPanel40Layout = new javax.swing.GroupLayout(jPanel40);
 		jPanel40.setLayout(jPanel40Layout);
@@ -538,57 +600,59 @@ public class NewJFrame extends javax.swing.JFrame {
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addGroup(jPanel40Layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-												.addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 161,
+												.addComponent(jTextFieldRequesterPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 161,
 														Short.MAX_VALUE)
-												.addComponent(jTextField1).addComponent(jTextField2))))
+												.addComponent(jTextFieldRequester).addComponent(jTextFieldSongId))))
 						.addContainerGap()));
 		jPanel40Layout.setVerticalGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel40Layout.createSequentialGroup().addGap(30, 30, 30)
 						.addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(jLabel19)
-								.addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jTextFieldRequester, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel4).addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabel4).addComponent(jTextFieldSongId, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel6).addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabel6).addComponent(jTextFieldRequesterPhone, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18).addComponent(jLabel7)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
 						.addContainerGap()));
 
-		jButton17.setText("Thêm");
-		jButton17.setMaximumSize(new java.awt.Dimension(55, 25));
-		jButton17.setMinimumSize(new java.awt.Dimension(55, 25));
-		jButton17.setPreferredSize(new java.awt.Dimension(55, 25));
+		jButtonAddRequest.setText("Thêm");
+		jButtonAddRequest.setMaximumSize(new java.awt.Dimension(55, 25));
+		jButtonAddRequest.setMinimumSize(new java.awt.Dimension(55, 25));
+		jButtonAddRequest.setPreferredSize(new java.awt.Dimension(55, 25));
+		jButtonAddRequest.addActionListener(this);
 
 		javax.swing.GroupLayout jPanel37Layout = new javax.swing.GroupLayout(jPanel37);
 		jPanel37.setLayout(jPanel37Layout);
 		jPanel37Layout.setHorizontalGroup(jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel37Layout.createSequentialGroup().addGap(72, 72, 72).addComponent(jLabel16).addGap(0, 76,
 						Short.MAX_VALUE))
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						jPanel37Layout.createSequentialGroup().addContainerGap()
-								.addGroup(jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(jPanel40, javax.swing.GroupLayout.Alignment.TRAILING,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-												jPanel37Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-														.addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE,
-																113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-								.addContainerGap()));
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel37Layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(jPanel40, javax.swing.GroupLayout.Alignment.TRAILING,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+										jPanel37Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+												.addComponent(jButtonAddRequest, javax.swing.GroupLayout.PREFERRED_SIZE,
+														113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap()));
 		jPanel37Layout.setVerticalGroup(jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel37Layout.createSequentialGroup().addContainerGap().addComponent(jLabel16)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton17,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(jButtonAddRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap()));
 
 		javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
@@ -624,11 +688,9 @@ public class NewJFrame extends javax.swing.JFrame {
 
 		jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-		jTable14.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null } },
-				new String[] { "Mã bài hát", "Tên bài hát", "Ngày yêu cầu", "Số lượt yêu cầu" }));
-		jScrollPane14.setViewportView(jTable14);
+		jTableUnresolvedSong.setModel(new javax.swing.table.DefaultTableModel(null,
+				new String[] { "STT", "Mã bài hát", "Tên bài hát", "Số lượt yêu cầu" }));
+		jScrollPane14.setViewportView(jTableUnresolvedSong);
 
 		jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel5.setText("BÀI HÁT CHƯA ĐƯỢC PHÁT");
@@ -642,11 +704,9 @@ public class NewJFrame extends javax.swing.JFrame {
 				.addGroup(jPanel15Layout.createSequentialGroup().addContainerGap().addComponent(jLabel5)
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-		jTable15.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null } },
+		jTableFavoriteSong.setModel(new javax.swing.table.DefaultTableModel(null,
 				new String[] { "STT", "Mã bài hát", "Tên bài hát", "Số lượt yêu cầu" }));
-		jScrollPane15.setViewportView(jTable15);
+		jScrollPane15.setViewportView(jTableFavoriteSong);
 
 		jLabel17.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel17.setText("BÀI HÁT ĐƯỢC ƯA THÍCH");
@@ -660,10 +720,10 @@ public class NewJFrame extends javax.swing.JFrame {
 				.addGroup(jPanel34Layout.createSequentialGroup().addContainerGap().addComponent(jLabel17)
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-		jTable16.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null },
-				{ null, null, null }, { null, null, null }, { null, null, null } },
-				new String[] { "Tên thính giả", "Yêu cầu", "Lý do" }));
-		jScrollPane16.setViewportView(jTable16);
+		jTableRequestExceptions.setModel(new javax.swing.table.DefaultTableModel(
+				null,
+				new String[] { "Tên thính giả", "Mã bài hát", "Lý do" }));
+		jScrollPane16.setViewportView(jTableRequestExceptions);
 
 		jLabel18.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel18.setText("CHƯA ĐÁP ỨNG");
@@ -682,6 +742,7 @@ public class NewJFrame extends javax.swing.JFrame {
 								.addComponent(jLabel18).addContainerGap()));
 
 		jButton6.setText("LÊN LỊCH PHÁT SONG KẾ TIẾP");
+		jButton6.addActionListener(this);
 
 		javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
 		jPanel14.setLayout(jPanel14Layout);
@@ -838,12 +899,12 @@ public class NewJFrame extends javax.swing.JFrame {
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JButton jButton1;
-	private javax.swing.JButton jButton16;
-	private javax.swing.JButton jButton17;
+	private javax.swing.JButton jButtonPlayBroadcast;
+	private javax.swing.JButton jButtonDeleteRequest;
+	private javax.swing.JButton jButtonAddRequest;
 	private javax.swing.JButton jButton2;
-	private javax.swing.JButton jButton3;
-	private javax.swing.JButton jButton4;
+	private javax.swing.JButton jButtonDeleteSong;
+	private javax.swing.JButton jButtonAddSong;
 	private javax.swing.JButton jButton5;
 	private javax.swing.JButton jButton6;
 	private javax.swing.JLabel jLabel1;
@@ -905,19 +966,63 @@ public class NewJFrame extends javax.swing.JFrame {
 	private javax.swing.JTabbedPane jTabbedPane6;
 	private javax.swing.JTable jTable1;
 	private javax.swing.JTable jTableRequest;
-	private javax.swing.JTable jTable14;
-	private javax.swing.JTable jTable15;
-	private javax.swing.JTable jTable16;
+	private javax.swing.JTable jTableUnresolvedSong;
+	private javax.swing.JTable jTableFavoriteSong;
+	private javax.swing.JTable jTableRequestExceptions;
 	private javax.swing.JTable jTableSong;
-	private javax.swing.JTextArea jTextArea1;
+	private javax.swing.JTextArea jTextAreaRequesterMessage;
 	private javax.swing.JTextArea jTextArea2;
-	private javax.swing.JTextField jTextField1;
-	private javax.swing.JTextField jTextField2;
-	private javax.swing.JTextField jTextField3;
-	private javax.swing.JTextField jTextField4;
-	private javax.swing.JTextField jTextField5;
-	private javax.swing.JTextField jTextField6;
-	private javax.swing.JTextField jTextField7;
-	private javax.swing.JTextField jTextField8;
+	private javax.swing.JTextField jTextFieldRequester;
+	private javax.swing.JTextField jTextFieldSongId;
+	private javax.swing.JTextField jTextFieldRequesterPhone;
+	private javax.swing.JTextField jTextFieldSongCode;
+	private javax.swing.JTextField jTextFieldSongName;
+	private javax.swing.JTextField jTextFieldComposerName;
+	private javax.swing.JTextField jTextFieldSingerName;
+	private javax.swing.JTextField jTextFieldLink;
 	// End of variables declaration//GEN-END:variables
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == jButtonAddSong) {
+			DataProvider dal = new DataProvider();
+			Song song = new Song(jTextFieldSongName.getText(), jTextFieldComposerName.getText(),
+					jTextFieldSingerName.getText());
+			dal.insertSong(song);
+			showSongs();
+		}
+
+		if (e.getSource() == jButtonPlayBroadcast) {
+			System.out.println("jButtonPlayBroadcast");
+		}
+
+		if (e.getSource() == jButton2) {
+			System.out.println("jButton2");
+		}
+
+		if (e.getSource() == jButtonDeleteSong) {
+			System.out.println("jButtonDeleteSong");
+		}
+
+		if (e.getSource() == jButton5) {
+			System.out.println("jButton5");
+		}
+
+		if (e.getSource() == jButton6) {
+			System.out.println("jButton6");
+		}
+
+		if (e.getSource() == jButtonDeleteRequest) {
+			System.out.println("jButtonDeleteRequest");
+		}
+
+		if (e.getSource() == jButtonAddRequest) {
+			User user = new User(jTextFieldRequester.getText(), jTextFieldRequesterPhone.getText(), "");
+			String user_id = new DataProvider().insertUser(user);
+			Request request = new Request(user_id, jTextFieldSongId.getText().substring(2), jTextAreaRequesterMessage.getText());
+			DataProvider dal = new DataProvider();
+			dal.insertRequest(request);
+			showRequests();
+		}
+	}
 }

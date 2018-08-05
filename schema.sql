@@ -35,11 +35,10 @@ CREATE TABLE IF NOT EXISTS requests (
   user_id INTEGER
   CONSTRAINT requests_user_id_foreign
   REFERENCES users,
-  song_id INTEGER
-  CONSTRAINT requests_song_id_foreign
-  REFERENCES songs,
+  song_id INTEGER,
   resolved BOOLEAN DEFAULT FALSE,
-  created_at DATE default CURRENT_DATE
+  created_at DATE default CURRENT_DATE,
+  message TEXT
 );
 
 CREATE TABLE IF NOT EXISTS broadcast_request (

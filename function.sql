@@ -95,7 +95,35 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_favorite_songs()
+  RETURNS TABLE(id INTEGER, song_name VARCHAR(255), request_count BIGINT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY (
+    SELECT songs.id as id, songs.name as song_name, count(r.id) as request_count
+    FROM songs LEFT JOIN requests r ON songs.id = r.song_id
+    WHERE r.resolved = TRUE 
+    GROUP BY songs.id
+    ORDER BY count(r.id) DESC
+  );
+END;
+$$
 
+CREATE OR REPLACE FUNCTION get_unbroadcasted_songs()
+  RETURNS TABLE(id INTEGER, song_name VARCHAR(255), request_count BIGINT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY (
+    SELECT songs.id as id, songs.name as song_name, count(r.id) as request_count
+    FROM songs LEFT JOIN requests r ON songs.id = r.song_id
+    WHERE r.resolved = FALSE 
+    GROUP BY songs.id
+    ORDER BY count(r.id) DESC
+  );
+END;
+$$
 
 
 

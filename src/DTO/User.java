@@ -14,7 +14,12 @@ public class User {
 		this.name = name;
 		this.phone = phone;
 		this.address = address;
-
+	}
+	
+	public User(String name, String phone, String address) {
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
 	}
 
 	public void setId(int id) {

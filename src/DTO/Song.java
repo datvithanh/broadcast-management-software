@@ -5,6 +5,7 @@ public class Song {
 	private String name;
 	private String composer;
 	private String singer;
+	private int requestCount;
 	
 	public Song() {}
 
@@ -13,6 +14,18 @@ public class Song {
 		this.name = name;
 		this.composer = composer;
 		this.singer = singer;
+	}
+	
+	public Song(String name, String composer, String singer) {
+		this.name = name;
+		this.composer = composer;
+		this.singer = singer;
+	}
+	
+	public Song(String id, String name, int requestCount) {
+		this.id = id;
+		this.name = name;
+		this.setRequestCount(requestCount);
 	}
 
 	public void setId(String string) {
@@ -43,22 +56,12 @@ public class Song {
  	public String getSinger() {
  		return singer;
  	}
- 	
-// 	public ArrayList<Song> getSongArray() throws SQLException {
-// 		DataProvider dp = new DataProvider();
-// 		ResultSet rs = dp.getSongs();
-//
-// 		ArrayList<Song> songArray = new ArrayList<Song>();
-// 		
-// 		ResultSetMetaData rsmd = rs.getMetaData();
-//        while (rs.next()) {
-//        	Song song = new Song(rs.getString("id"), rs.getString("name"), rs.getString("composer"), rs.getString("singer"));
-//        	songArray.add(song);   
-//            System.out.println(song.getName());
-//
-//        }
-//      
-//        
-//		return songArray;
-// 	}
+
+	public int getRequestCount() {
+		return requestCount;
+	}
+
+	public void setRequestCount(int requestCount) {
+		this.requestCount = requestCount;
+	}
 }
