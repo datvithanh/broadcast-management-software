@@ -15,9 +15,7 @@ import DTO.User;
 import java.util.ArrayList;
 
 public class DataProvider {
-	private final String url = "jdbc:postgresql://127.0.0.1:54321/default";
-	private final String user = "default";
-	private final String password = "secret";
+	private final String songsPerBroadcast = "5";
 
 	/**
 	 * Connect to the PostgreSQL database
@@ -25,10 +23,10 @@ public class DataProvider {
 	 * @return a Connection object
 	 * @throws SQLException
 	 */
-	public Connection connect() {
+	public static Connection connect() {
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(url, user, password);
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:54321/default", "default", "secret");
 			System.out.println("Connected to the PostgreSQL server successfully.");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -60,7 +58,7 @@ public class DataProvider {
 		ArrayList<Request> requestList = new ArrayList<>();
 		Connection conn = connect();
 		try {
-			String query = "SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, requests.created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar";
+			String query = "SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, date(requests.created_at) as created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Request request;
@@ -115,13 +113,13 @@ public class DataProvider {
 		}
 		return songList;
 	}
-	
-	public ArrayList<Broadcast> broadcastList(){
+
+	public ArrayList<Broadcast> broadcastList() {
 		ArrayList<Broadcast> broadcastList = new ArrayList<>();
-		Connection conn = connect();
+		// Connection conn = connect();
 		return broadcastList;
 	}
-	
+
 	public ArrayList<Request> requestExceptionList() {
 		ArrayList<Request> requestList = new ArrayList<>();
 		Connection conn = connect();
@@ -169,12 +167,11 @@ public class DataProvider {
 		String a = "";
 		return a;
 	}
-	
+
 	public void insertRequest(Request request) {
 		Connection conn = connect();
 		try {
 			String query = " insert into requests (user_id, song_id, message)" + " values (?, ?, ?)";
-			System.out.println(query);
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			preparedStmt.setInt(1, Integer.parseInt(request.getUserId()));
 			preparedStmt.setString(2, request.getSongId());
@@ -185,7 +182,70 @@ public class DataProvider {
 		}
 	}
 
-	public static void main(String[] args) throws SQLException {
+	public void broadcastSongs(String songId, String broadcastId, int order) {
+		Connection conn = connect();
+		try {
+			String query = "SELECT * FROM requests Where song_id = '" + songId + "'";
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				String requestId = rs.getString("id");
+				query = "insert into broadcast_request(broadcast_id, request_id, order_number)" + " values(?, ?, ?)";
+				PreparedStatement preparedStmt = conn.prepareStatement(query);
+				preparedStmt.setInt(1, Integer.parseInt(broadcastId));
+				preparedStmt.setInt(2, Integer.parseInt(requestId));
+				preparedStmt.setInt(3, order);
+				preparedStmt.execute();
+			}
 
+			 query = "UPDATE requests SET (resolved) = ROW(true) where song_id = '" + songId + "'";
+			 st.execute(query);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public String insertBroadcast() {
+		Connection conn = connect();
+		try {
+			String query = "SELECT count(*) FROM broadcasts where date(created_at) = current_date";
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+
+			rs.next();
+			int count = rs.getInt("count") + 1;
+
+			query = "SELECT * FROM current_date";
+			rs = st.executeQuery(query);
+			rs.next();
+			String date = rs.getString("current_date");
+			String name = "Phat song ngay " + date + " lan " + Integer.toString(count);
+
+			query = " insert into broadcasts (name)" + " values ('" + name + "') returning id";
+			st = conn.createStatement();
+			rs = st.executeQuery(query);
+			rs.next();
+			String broadcastId = rs.getString("id");
+
+			query = "SELECT songs.id as id, songs.name as song_name, count(r.id) as request_count FROM songs LEFT JOIN requests r ON songs.id::varchar = r.song_id WHERE r.resolved = FALSE GROUP BY songs.id ORDER BY count(r.id) DESC LIMIT "
+					+ songsPerBroadcast;
+
+			rs = st.executeQuery(query);
+			int i = 0;
+			while (rs.next()) {
+				++i;
+				broadcastSongs(rs.getString("id"), broadcastId, i);
+			}
+
+
+			return "Phat song ngay " + date + " lan " + Integer.toString(count);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return null;
+	}
+
+	public static void main(String[] args) throws SQLException {
 	}
 }

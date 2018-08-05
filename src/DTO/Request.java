@@ -61,7 +61,7 @@ public class Request {
 		this.songId = songId;
 	}
 
-	public boolean isResolved() {
+	public boolean getResolved() {
 		return resolved;
 	}
 

@@ -4,7 +4,7 @@ CREATE  TABLE  IF NOT EXISTS broadcasts (
   PRIMARY KEY,
   name VARCHAR(255) NOT NULL ,
   broadcast_at TIMESTAMP(0) DEFAULT current_timestamp,
-  created_at DATE default current_date
+  created_at TIMESTAMP default current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(255) NOT NULL,
   phone VARCHAR(255) NOT NULL,
   address VARCHAR(255),
-  created_at DATE default CURRENT_DATE
+  created_at TIMESTAMP default current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS songs(
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS songs(
   composer VARCHAR(255),
   singer VARCHAR(255),
   released_at DATE,
-  created_at DATE default CURRENT_DATE
+  created_at TIMESTAMP default current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS requests (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS requests (
   REFERENCES users,
   song_id INTEGER,
   resolved BOOLEAN DEFAULT FALSE,
-  created_at DATE default CURRENT_DATE,
+  created_at TIMESTAMP default current_timestamp,
   message TEXT
 );
 
@@ -52,5 +52,5 @@ CREATE TABLE IF NOT EXISTS broadcast_request (
   CONSTRAINT broadcast_request_request_id_foreign
   REFERENCES requests,
   order_number INTEGER NOT NULL,
-  created_at DATE default CURRENT_DATE
+  created_at TIMESTAMP default current_timestamp
 );
