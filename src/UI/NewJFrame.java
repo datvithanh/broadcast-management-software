@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 import DAL.DataProvider;
+import DTO.Broadcast;
 import DTO.Request;
 import DTO.Song;
 import DTO.User;
@@ -25,8 +26,23 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		showFavoriteSongs();
 		showUnresolvedSongs();
 		showRequestExceptions();
+		showBroadcasts();
 	}
-	
+
+	public void showBroadcasts() {
+		ArrayList<Broadcast> broadcastList = new DataProvider().broadcastList();
+		DefaultTableModel model = (DefaultTableModel) jTableBroadcasts.getModel();
+		Object[] row = new Object[4];
+		model.setNumRows(0);
+		for (int i = 0; i < broadcastList.size(); ++i) {
+			row[0] = i + 1;
+			row[1] = "BC" + broadcastList.get(i).getId();
+			row[2] = broadcastList.get(i).getName();
+			row[3] = broadcastList.get(i).getCreatedAt();
+			model.addRow(row);
+		}
+	}
+
 	public void showRequestExceptions() {
 		ArrayList<Request> requestList = new DataProvider().requestExceptionList();
 		DefaultTableModel model = (DefaultTableModel) jTableRequestExceptions.getModel();
@@ -61,7 +77,6 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		DefaultTableModel model = (DefaultTableModel) jTableRequest.getModel();
 		Object[] row = new Object[7];
 		model.setNumRows(0);
-
 		for (int i = 0; i < requestList.size(); i++) {
 			row[0] = i + 1;
 			row[1] = requestList.get(i).getUserName();
@@ -111,7 +126,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jPanel6 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
-		jTable1 = new javax.swing.JTable();
+		jTableBroadcasts = new javax.swing.JTable();
+		jTable3 = new javax.swing.JTable();
 		jPanel7 = new javax.swing.JPanel();
 		jButtonPlayBroadcast = new javax.swing.JButton("jButtonPlayBroadcast");
 		jButton2 = new javax.swing.JButton("jButton2");
@@ -119,15 +135,17 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jPanel8 = new javax.swing.JPanel();
 		jPanel9 = new javax.swing.JPanel();
 		jScrollPane2 = new javax.swing.JScrollPane();
+		jScrollPane5 = new javax.swing.JScrollPane();
 		jTableSong = new javax.swing.JTable();
 		jButtonDeleteSong = new javax.swing.JButton("jButtonDeleteSong");
 		jLabel2 = new javax.swing.JLabel();
 		jPanel10 = new javax.swing.JPanel();
 		jLabel3 = new javax.swing.JLabel();
+		jLabel13 = new javax.swing.JLabel();
 		jPanel11 = new javax.swing.JPanel();
 		jLabel8 = new javax.swing.JLabel();
-//		jTextFieldSongCode = new javax.swing.JTextField();
-//		jLabel20 = new javax.swing.JLabel();
+		// jTextFieldSongCode = new javax.swing.JTextField();
+		// jLabel20 = new javax.swing.JLabel();
 		jTextFieldSongName = new javax.swing.JTextField();
 		jLabel9 = new javax.swing.JLabel();
 		jTextFieldComposerName = new javax.swing.JTextField();
@@ -162,6 +180,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jButtonAddRequest = new javax.swing.JButton("jButtonAddRequest");
 		jPanel4 = new javax.swing.JPanel();
 		jPanel14 = new javax.swing.JPanel();
+		jPanel12 = new javax.swing.JPanel();
 		jScrollPane14 = new javax.swing.JScrollPane();
 		jTableUnresolvedSong = new javax.swing.JTable();
 		jPanel15 = new javax.swing.JPanel();
@@ -198,27 +217,25 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
 		jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-		jLabel1.setText("PHÁT SÓNG");
+		jLabel1.setText("DANH SÁCH PHÁT");
 
 		javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
 		jPanel6.setLayout(jPanel6Layout);
 		jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel6Layout.createSequentialGroup().addGap(436, 436, 436).addComponent(jLabel1)
-						.addContainerGap(463, Short.MAX_VALUE)));
+				.addGroup(jPanel6Layout.createSequentialGroup().addGap(277, 277, 277).addComponent(jLabel1)
+						.addContainerGap(277, Short.MAX_VALUE)));
 		jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-						.addContainerGap(29, Short.MAX_VALUE).addComponent(jLabel1).addContainerGap()));
+						.addContainerGap(21, Short.MAX_VALUE).addComponent(jLabel1).addContainerGap()));
 
-		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-				null,
-				new String[] { "Số thứ tự", "Tên bài hát", "Ngày phát", "Ca sĩ", "Nhạc sĩ"}));
-		jScrollPane1.setViewportView(jTable1);
-
+		jTableBroadcasts.setModel(new javax.swing.table.DefaultTableModel(null,
+				new String[] { "Số thứ tự ", "Mã phát sóng", "Tên", "Ngày phát" }));
+		jScrollPane1.setViewportView(jTableBroadcasts);
+//		jTableBroadcasts.getSelectionModel().addListSelectionListener((ListSelectionListener) this);
+		
 		jButtonPlayBroadcast.setText("PLAY");
 		jButtonPlayBroadcast.addActionListener(this);
-
 		jButton2.setText("NEXT");
-		jButton2.addActionListener(this);
 
 		javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
 		jPanel7.setLayout(jPanel7Layout);
@@ -233,25 +250,61 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 						.addComponent(jButtonPlayBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
 						.addComponent(jButton2)));
 
+		jTable3.setModel(
+				new javax.swing.table.DefaultTableModel(
+						null,
+						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		jScrollPane5.setViewportView(jTable3);
+
+		jLabel13.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+		jLabel13.setText("Thông tin thêm");
+
+		javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+		jPanel12.setLayout(jPanel12Layout);
+		jPanel12Layout.setHorizontalGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+						.addContainerGap(106, Short.MAX_VALUE).addComponent(jLabel13).addGap(96, 96, 96)));
+		jPanel12Layout.setVerticalGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+						jPanel12Layout.createSequentialGroup()
+								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabel13).addContainerGap()));
+
 		javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
 		jPanel5.setLayout(jPanel5Layout);
 		jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						jPanel5Layout.createSequentialGroup().addContainerGap()
-								.addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-										.addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGroup(jPanel5Layout.createSequentialGroup().addContainerGap().addGroup(jPanel5Layout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(jPanel5Layout.createSequentialGroup()
+								.addGroup(jPanel5Layout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 										.addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-								.addContainerGap()));
+								.addGap(18, 18, 18)
+								.addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+												Short.MAX_VALUE)
+										.addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+						.addContainerGap()));
 		jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel5Layout.createSequentialGroup().addContainerGap()
-						.addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+								.addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGap(24, 24, 24)
+						.addGroup(
+								jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 453,
+												Short.MAX_VALUE)
+										.addComponent(jScrollPane1))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 						.addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -274,7 +327,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jPanel8.setPreferredSize(new java.awt.Dimension(1127, 601));
 
 		jPanel9.setPreferredSize(new java.awt.Dimension(772, 572));
-		
+
 		jTableSong.setModel(new javax.swing.table.DefaultTableModel(null,
 				new String[] { "Mã bài ", "Tên bài hát", "Tên nhạc sĩ", "Tên ca sĩ" }));
 		jTableSong.setAutoscrolls(false);
@@ -327,10 +380,11 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 		jLabel8.setText("Tên bài hát*");
 
-//		jTextFieldSongCode.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		// jTextFieldSongCode.setFont(new java.awt.Font("Times New Roman", 0, 14)); //
+		// NOI18N
 
-//		jLabel20.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-//		jLabel20.setText("Mã bài hát:");
+		// jLabel20.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+		// jLabel20.setText("Mã bài hát:");
 
 		jTextFieldSongName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
@@ -372,8 +426,9 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 												.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
 												.addGroup(jPanel11Layout
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-//														.addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE,
-//																82, javax.swing.GroupLayout.PREFERRED_SIZE)
+														// .addComponent(jLabel20,
+														// javax.swing.GroupLayout.PREFERRED_SIZE,
+														// 82, javax.swing.GroupLayout.PREFERRED_SIZE)
 														.addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE,
 																82, javax.swing.GroupLayout.PREFERRED_SIZE)))
 										.addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -386,8 +441,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 												.addComponent(jTextFieldSingerName,
 														javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
 												.addComponent(jTextFieldComposerName).addComponent(jTextFieldSongName)
-//												.addComponent(jTextFieldSongCode)
-												))
+								// .addComponent(jTextFieldSongCode)
+								))
 								.addGroup(jPanel11Layout.createSequentialGroup().addGap(0, 5, Short.MAX_VALUE)
 										.addGroup(jPanel11Layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -407,11 +462,10 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jPanel11Layout.setVerticalGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel11Layout.createSequentialGroup().addGap(28, 28, 28)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//								.addComponent(jLabel20)
-//								.addComponent(jTextFieldSongCode, javax.swing.GroupLayout.PREFERRED_SIZE,
-//										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								)
-						.addGap(18, 18, 18)
+						// .addComponent(jLabel20)
+						// .addComponent(jTextFieldSongCode, javax.swing.GroupLayout.PREFERRED_SIZE,
+						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						).addGap(18, 18, 18)
 						.addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(jLabel8)
 								.addComponent(jTextFieldSongName, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -508,8 +562,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 
 		jPanel36.setPreferredSize(new java.awt.Dimension(772, 572));
 
-		jTableRequest.setModel(new javax.swing.table.DefaultTableModel(null,
-				new String[] { "STT", "Người yêu cầu", "Ngày yêu cầu", "Tên bài hát", "Ca sĩ", "Nhạc sĩ", "Trạng thái" }));
+		jTableRequest.setModel(new javax.swing.table.DefaultTableModel(null, new String[] { "STT", "Người yêu cầu",
+				"Ngày yêu cầu", "Tên bài hát", "Ca sĩ", "Nhạc sĩ", "Trạng thái" }));
 		jTableRequest.setAutoscrolls(false);
 		jScrollPane13.setViewportView(jTableRequest);
 
@@ -595,8 +649,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addGroup(jPanel40Layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-												.addComponent(jTextFieldRequesterPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 161,
-														Short.MAX_VALUE)
+												.addComponent(jTextFieldRequesterPhone,
+														javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
 												.addComponent(jTextFieldRequester).addComponent(jTextFieldSongId))))
 						.addContainerGap()));
 		jPanel40Layout.setVerticalGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -607,12 +661,14 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel4).addComponent(jTextFieldSongId, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabel4)
+								.addComponent(jTextFieldSongId, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel6).addComponent(jTextFieldRequesterPhone, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addComponent(jLabel6).addComponent(jTextFieldRequesterPhone,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18).addComponent(jLabel7)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
@@ -715,9 +771,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 				.addGroup(jPanel34Layout.createSequentialGroup().addContainerGap().addComponent(jLabel17)
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-		jTableRequestExceptions.setModel(new javax.swing.table.DefaultTableModel(
-				null,
-				new String[] { "Tên thính giả", "Mã bài hát", "Lý do" }));
+		jTableRequestExceptions.setModel(
+				new javax.swing.table.DefaultTableModel(null, new String[] { "Tên thính giả", "Mã bài hát", "Lý do" }));
 		jScrollPane16.setViewportView(jTableRequestExceptions);
 
 		jLabel18.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
@@ -906,13 +961,14 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JLabel jLabel10;
 	private javax.swing.JLabel jLabel11;
 	private javax.swing.JLabel jLabel12;
+	private javax.swing.JLabel jLabel13;
 	private javax.swing.JLabel jLabel15;
 	private javax.swing.JLabel jLabel16;
 	private javax.swing.JLabel jLabel17;
 	private javax.swing.JLabel jLabel18;
 	private javax.swing.JLabel jLabel19;
 	private javax.swing.JLabel jLabel2;
-//	private javax.swing.JLabel jLabel20;
+	// private javax.swing.JLabel jLabel20;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
@@ -932,6 +988,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JMenuItem jMenuItem5;
 	private javax.swing.JMenuItem jMenuItem6;
 	private javax.swing.JPanel jPanel1;
+	private javax.swing.JPanel jPanel12;
+
 	private javax.swing.JPanel jPanel10;
 	private javax.swing.JPanel jPanel11;
 	private javax.swing.JPanel jPanel14;
@@ -954,12 +1012,14 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JScrollPane jScrollPane13;
 	private javax.swing.JScrollPane jScrollPane14;
 	private javax.swing.JScrollPane jScrollPane15;
+	private javax.swing.JScrollPane jScrollPane5;
 	private javax.swing.JScrollPane jScrollPane16;
 	private javax.swing.JScrollPane jScrollPane2;
 	private javax.swing.JScrollPane jScrollPane3;
 	private javax.swing.JScrollPane jScrollPane4;
 	private javax.swing.JTabbedPane jTabbedPane6;
-	private javax.swing.JTable jTable1;
+	private javax.swing.JTable jTableBroadcasts;
+	private javax.swing.JTable jTable3;
 	private javax.swing.JTable jTableRequest;
 	private javax.swing.JTable jTableUnresolvedSong;
 	private javax.swing.JTable jTableFavoriteSong;
@@ -970,7 +1030,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JTextField jTextFieldRequester;
 	private javax.swing.JTextField jTextFieldSongId;
 	private javax.swing.JTextField jTextFieldRequesterPhone;
-//	private javax.swing.JTextField jTextFieldSongCode;
+	// private javax.swing.JTextField jTextFieldSongCode;
 	private javax.swing.JTextField jTextFieldSongName;
 	private javax.swing.JTextField jTextFieldComposerName;
 	private javax.swing.JTextField jTextFieldSingerName;
@@ -980,7 +1040,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == jButtonAddSong) {
-			if(jTextFieldSongName.getText().equals("") || jTextFieldComposerName.getText().equals("") || jTextFieldSingerName.getText().equals("")) {
+			if (jTextFieldSongName.getText().equals("") || jTextFieldComposerName.getText().equals("")
+					|| jTextFieldSingerName.getText().equals("")) {
 				javax.swing.JOptionPane.showMessageDialog(null, "Điền đầy đủ các trường có *");
 				return;
 			}
@@ -992,7 +1053,9 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == jButtonPlayBroadcast) {
-			System.out.println("jButtonPlayBroadcast");
+			String broadcastId = (String) jTableBroadcasts.getValueAt(jTableBroadcasts.getSelectedRow(), 1);
+			broadcastId = broadcastId.substring(2);
+			System.out.println(broadcastId);
 		}
 
 		if (e.getSource() == jButton2) {
@@ -1014,19 +1077,21 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 			showRequests();
 			showFavoriteSongs();
 			showUnresolvedSongs();
-			showRequestExceptions();
+			showBroadcasts();
 		}
 
 		if (e.getSource() == jButtonDeleteRequest) {
 			System.out.println("jButtonDeleteRequest");
+			
 		}
 
 		if (e.getSource() == jButtonAddRequest) {
-			if(jTextFieldRequester.getText().equals("") || jTextFieldSongId.getText().equals("") || jTextFieldRequesterPhone.getText().equals("")) {
+			if (jTextFieldRequester.getText().equals("") || jTextFieldSongId.getText().equals("")
+					|| jTextFieldRequesterPhone.getText().equals("")) {
 				javax.swing.JOptionPane.showMessageDialog(null, "Điền đầy đủ các trường có *");
 				return;
 			}
-			
+
 			User user = new User(jTextFieldRequester.getText(), jTextFieldRequesterPhone.getText(), "");
 			String user_id = new DataProvider().insertUser(user);
 			Request request = new Request(user_id, jTextFieldSongId.getText(), jTextAreaRequesterMessage.getText());

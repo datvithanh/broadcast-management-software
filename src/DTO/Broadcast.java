@@ -2,25 +2,31 @@ package DTO;
 
 public class Broadcast {
 
-		private int id;
+		private String id;
 		private String name;
 		private String broadcastAt;
 		private String createdAt;
 	
 	
 	
-	public Broadcast(int id, String name, String broadcastAt, String createdAt ) {	
+	public Broadcast(String id, String name, String broadcastAt, String createdAt ) {	
 		this.id = id;
 		this.name = name;
 		this.broadcastAt = broadcastAt;
 		this.createdAt = createdAt;
 	}
+	
+	public Broadcast(String id, String name, String createdAt ) {	
+		this.id = id;
+		this.name = name;
+		this.createdAt = createdAt;
+	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

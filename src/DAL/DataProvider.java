@@ -114,12 +114,6 @@ public class DataProvider {
 		return songList;
 	}
 
-	public ArrayList<Broadcast> broadcastList() {
-		ArrayList<Broadcast> broadcastList = new ArrayList<>();
-		// Connection conn = connect();
-		return broadcastList;
-	}
-
 	public ArrayList<Request> requestExceptionList() {
 		ArrayList<Request> requestList = new ArrayList<>();
 		Connection conn = connect();
@@ -136,6 +130,35 @@ public class DataProvider {
 			System.out.println(e.getMessage());
 		}
 		return requestList;
+	}
+	
+	public ArrayList<Broadcast> broadcastList() {
+		ArrayList<Broadcast> broadcastList = new ArrayList<>();
+		Connection conn = connect();
+		try {
+			String query = "SELECT id, name, date(created_at) as created_at FROM broadcasts order by created_at desc";
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			Broadcast broadcast;
+			while (rs.next()) {
+				broadcast = new Broadcast(rs.getString("id"), rs.getString("name"), rs.getString("created_at"));
+				broadcastList.add(broadcast);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return broadcastList;
+	}
+	
+	public void deleteRequest(String requestId) {
+		Connection conn = connect();
+		try {
+			String query = "delete from request where id = " + requestId;
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void insertSong(Song song) {
@@ -204,7 +227,7 @@ public class DataProvider {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
 	public String insertBroadcast() {
 		Connection conn = connect();
 		try {
@@ -247,5 +270,6 @@ public class DataProvider {
 	}
 
 	public static void main(String[] args) throws SQLException {
+		
 	}
 }
