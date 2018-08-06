@@ -1053,7 +1053,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 
 	public void jTable1MouseClicked(java.awt.event.MouseEvent evt) {                                     
 	     JTable source = (JTable) evt.getSource();
-	     
+	     System.out.println(source.getName());
 	}
 	
 	public void actionPerformed(ActionEvent e) {
