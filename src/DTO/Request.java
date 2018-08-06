@@ -13,11 +13,19 @@ public class Request {
 	private String singerName;
 	private String message;
 	private String exception;
+	private String orderNumber;
 	
 	public Request(String userId, String songId, String message) {
 		this.userId = userId;
 		this.songId = userId;
 		this.message = message;
+	}
+	
+	public Request(String userName, String songName, String singerName, String orderNumber) {
+		this.userName = userName;
+		this.songName = songName;
+		this.singerName = singerName;
+		this.orderNumber = orderNumber;
 	}
 	
 	public Request(String userName, String songId, String exception, int i) {
@@ -123,6 +131,14 @@ public class Request {
 
 	public void setException(String exception) {
 		this.exception = exception;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
 }

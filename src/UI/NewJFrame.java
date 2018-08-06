@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import DAL.DataProvider;
@@ -41,6 +42,8 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 			row[3] = broadcastList.get(i).getCreatedAt();
 			model.addRow(row);
 		}
+		jTableBroadcasts.changeSelection(0, 0, false, false);
+		showBroadcastRequests(broadcastList.get(0).getId());
 	}
 
 	public void showRequestExceptions() {
@@ -53,6 +56,21 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 			row[0] = requestList.get(i).getUserName();
 			row[1] = "SO" + requestList.get(i).getSongId();
 			row[2] = requestList.get(i).getException();
+			model.addRow(row);
+		}
+	}
+	
+	public void showBroadcastRequests(String broadcastId) {
+		ArrayList<Request> broadcastRequest = new DataProvider().broadcastRequestList(broadcastId);
+		DefaultTableModel model = (DefaultTableModel) jTableBroadcastRequest.getModel();
+		model.setNumRows(0);
+		Object[] row = new Object[4];
+		
+		for(int i = 0; i < broadcastRequest.size(); i++) {
+			row[1] = broadcastRequest.get(i).getUserName();
+			row[2] = broadcastRequest.get(i).getSongName();
+			row[3] = broadcastRequest.get(i).getSingerName();
+			row[0] = broadcastRequest.get(i).getOrderNumber();
 			model.addRow(row);
 		}
 	}
@@ -127,10 +145,9 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		jLabel1 = new javax.swing.JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTableBroadcasts = new javax.swing.JTable();
-		jTable3 = new javax.swing.JTable();
+		jTableBroadcastRequest = new javax.swing.JTable();
 		jPanel7 = new javax.swing.JPanel();
 		jButtonPlayBroadcast = new javax.swing.JButton("jButtonPlayBroadcast");
-		jButton2 = new javax.swing.JButton("jButton2");
 		jPanel2 = new javax.swing.JPanel();
 		jPanel8 = new javax.swing.JPanel();
 		jPanel9 = new javax.swing.JPanel();
@@ -235,7 +252,6 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		
 		jButtonPlayBroadcast.setText("PLAY");
 		jButtonPlayBroadcast.addActionListener(this);
-		jButton2.setText("NEXT");
 
 		javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
 		jPanel7.setLayout(jPanel7Layout);
@@ -243,18 +259,17 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 				.addGroup(jPanel7Layout.createSequentialGroup().addContainerGap()
 						.addComponent(jButtonPlayBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 76,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18).addComponent(jButton2)
 						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 						.addComponent(jButtonPlayBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-						.addComponent(jButton2)));
+						));
 
-		jTable3.setModel(
+		jTableBroadcastRequest.setModel(
 				new javax.swing.table.DefaultTableModel(
 						null,
-						new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
-		jScrollPane5.setViewportView(jTable3);
+						new String[] {"Thứ tự phát", "Người yêu cầu", "Tên bài hát", "Ca sĩ"}));
+		jScrollPane5.setViewportView(jTableBroadcastRequest);
 
 		jLabel13.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
 		jLabel13.setText("Thông tin thêm");
@@ -952,7 +967,6 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JButton jButtonPlayBroadcast;
 	private javax.swing.JButton jButtonDeleteRequest;
 	private javax.swing.JButton jButtonAddRequest;
-	private javax.swing.JButton jButton2;
 	private javax.swing.JButton jButtonDeleteSong;
 	private javax.swing.JButton jButtonAddSong;
 	private javax.swing.JButton jButton5;
@@ -1019,7 +1033,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JScrollPane jScrollPane4;
 	private javax.swing.JTabbedPane jTabbedPane6;
 	private javax.swing.JTable jTableBroadcasts;
-	private javax.swing.JTable jTable3;
+	private javax.swing.JTable jTableBroadcastRequest;
 	private javax.swing.JTable jTableRequest;
 	private javax.swing.JTable jTableUnresolvedSong;
 	private javax.swing.JTable jTableFavoriteSong;
@@ -1037,7 +1051,11 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 	private javax.swing.JTextField jTextFieldLink;
 	// End of variables declaration//GEN-END:variables
 
-	@Override
+	public void jTable1MouseClicked(java.awt.event.MouseEvent evt) {                                     
+	     JTable source = (JTable) evt.getSource();
+	     
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == jButtonAddSong) {
 			if (jTextFieldSongName.getText().equals("") || jTextFieldComposerName.getText().equals("")
@@ -1055,11 +1073,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		if (e.getSource() == jButtonPlayBroadcast) {
 			String broadcastId = (String) jTableBroadcasts.getValueAt(jTableBroadcasts.getSelectedRow(), 1);
 			broadcastId = broadcastId.substring(2);
-			System.out.println(broadcastId);
-		}
-
-		if (e.getSource() == jButton2) {
-			System.out.println("jButton2");
+			showBroadcastRequests(broadcastId);
 		}
 
 		if (e.getSource() == jButtonDeleteSong) {

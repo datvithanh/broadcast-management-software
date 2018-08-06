@@ -228,6 +228,26 @@ public class DataProvider {
 		}
 	}
 	
+	public ArrayList<Request> broadcastRequestList(String broadcastId) {
+		ArrayList<Request> broadcastRequestList = new ArrayList<>();
+		Connection conn = connect();
+		try {
+			String query = "SELECT r.user_name as user_name, r.song_name as song_name, r.singer_name as singer_name, r.composer_name as composer_name, broadcast_request.order_number as order_number FROM (SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, date(requests.created_at) as created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar) r JOIN broadcast_request ON r.id = broadcast_request.request_id WHERE broadcast_request.broadcast_id = " + broadcastId;
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			Request request;
+			while (rs.next()) {
+				request = new Request(rs.getString("user_name"), rs.getString("song_name"), rs.getString("singer_name"), rs.getString("order_number"));
+				broadcastRequestList.add(request);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return broadcastRequestList;
+	}
+	
+	
 	public String insertBroadcast() {
 		Connection conn = connect();
 		try {
