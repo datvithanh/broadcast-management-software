@@ -75,7 +75,6 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 			model.addRow(row);
 		}
 	}
-
 	public void showBroadcastRequests(String broadcastId) {
 		ArrayList<Request> broadcastRequest = new DataProvider().broadcastRequestList(broadcastId);
 		DefaultTableModel model = (DefaultTableModel) jTableBroadcastRequest.getModel();

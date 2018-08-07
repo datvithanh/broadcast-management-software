@@ -160,7 +160,6 @@ public class DataProvider {
 		}
 		return requestList;
 	}
-
 	public ArrayList<Broadcast> broadcastList() {
 		ArrayList<Broadcast> broadcastList = new ArrayList<>();
 		Connection conn = connect();
@@ -258,7 +257,6 @@ public class DataProvider {
 			System.out.println(e.getMessage());
 		}
 	}
-
 	public ArrayList<Request> broadcastRequestList(String broadcastId) {
 		ArrayList<Request> broadcastRequestList = new ArrayList<>();
 		Connection conn = connect();
@@ -279,7 +277,6 @@ public class DataProvider {
 
 		return broadcastRequestList;
 	}
-
 	public String insertBroadcast() {
 		Connection conn = connect();
 		try {
@@ -321,6 +318,5 @@ public class DataProvider {
 	}
 
 	public static void main(String[] args) throws SQLException {
-
 	}
 }

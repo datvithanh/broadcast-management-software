@@ -18,7 +18,8 @@ CREATE TABLE songs
   composer    VARCHAR(255),
   singer      VARCHAR(255),
   released_at DATE,
-  created_at  DATE DEFAULT CURRENT_DATE
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  link        VARCHAR(255)
 );
 
 CREATE TABLE requests
