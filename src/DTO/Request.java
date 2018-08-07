@@ -17,7 +17,7 @@ public class Request {
 	
 	public Request(String userId, String songId, String message) {
 		this.userId = userId;
-		this.songId = userId;
+		this.songId = songId;
 		this.message = message;
 	}
 	

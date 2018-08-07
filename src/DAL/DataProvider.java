@@ -87,7 +87,7 @@ public class DataProvider {
 		ArrayList<Request> requestList = new ArrayList<>();
 		Connection conn = connect();
 		try {
-			String query = "SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, date(requests.created_at) as created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar";
+			String query = "SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, date(requests.created_at) as created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar ORDER BY  requests.created_at DESC";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Request request;
@@ -147,7 +147,7 @@ public class DataProvider {
 		ArrayList<Request> requestList = new ArrayList<>();
 		Connection conn = connect();
 		try {
-			String query = "SELECT users.name, requests.song_id, 'Khong ton tai ma bai hat' as exception FROM (SELECT * FROM requests WHERE song_id NOT IN (SELECT id::VARCHAR FROM songs)) requests LEFT JOIN users ON requests.user_id = users.id;";
+			String query = "SELECT users.name, requests.song_id, 'Khong ton tai ma bai hat' as exception FROM (SELECT * FROM requests WHERE song_id NOT IN (SELECT id::VARCHAR FROM songs)) requests LEFT JOIN users ON requests.user_id = users.id ORDER BY  requests.created_at desc;";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Request request;
@@ -164,12 +164,12 @@ public class DataProvider {
 		ArrayList<Broadcast> broadcastList = new ArrayList<>();
 		Connection conn = connect();
 		try {
-			String query = "SELECT id, name, date(created_at) as created_at FROM broadcasts order by created_at desc";
+			String query = "SELECT id, name, date(created_at) as date FROM broadcasts order by created_at desc";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Broadcast broadcast;
 			while (rs.next()) {
-				broadcast = new Broadcast(rs.getString("id"), rs.getString("name"), rs.getString("created_at"));
+				broadcast = new Broadcast(rs.getString("id"), rs.getString("name"), rs.getString("date"));
 				broadcastList.add(broadcast);
 			}
 		} catch (SQLException e) {
@@ -230,6 +230,7 @@ public class DataProvider {
 			preparedStmt.setString(2, request.getSongId());
 			preparedStmt.setString(3, request.getMessage());
 			preparedStmt.execute();
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -262,7 +263,7 @@ public class DataProvider {
 		Connection conn = connect();
 		try {
 			String query = "SELECT r.user_name as user_name, r.song_name as song_name, r.singer_name as singer_name, r.composer_name as composer_name, broadcast_request.order_number as order_number FROM (SELECT requests.id, requests.user_name, songs.name as song_name,  songs.singer as singer_name, songs.composer as composer_name, requests.resolved, date(requests.created_at) as created_at FROM (SELECT requests.*, users.name as user_name FROM requests LEFT JOIN users ON requests.user_id = users.id) as requests LEFT JOIN songs ON requests.song_id = songs.id::varchar) r JOIN broadcast_request ON r.id = broadcast_request.request_id WHERE broadcast_request.broadcast_id = "
-					+ broadcastId;
+					+ broadcastId + " order by broadcast_request asc";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			Request request;
@@ -277,8 +278,9 @@ public class DataProvider {
 
 		return broadcastRequestList;
 	}
-	public String insertBroadcast() {
+	public Broadcast insertBroadcast() {
 		Connection conn = connect();
+		Broadcast broadcast = null;
 		try {
 			String query = "SELECT count(*) FROM broadcasts where date(created_at) = current_date";
 			Statement st = conn.createStatement();
@@ -299,22 +301,24 @@ public class DataProvider {
 			rs.next();
 			String broadcastId = rs.getString("id");
 
-			query = "SELECT songs.id as id, songs.name as song_name, count(r.id) as request_count FROM songs LEFT JOIN requests r ON songs.id::varchar = r.song_id WHERE r.resolved = FALSE GROUP BY songs.id ORDER BY count(r.id) DESC LIMIT "
-					+ songsPerBroadcast;
-
+			query = "SELECT songs.id as id, songs.name as song_name, count(r.id) as request_count FROM songs LEFT JOIN requests r ON songs.id::varchar = r.song_id WHERE r.resolved = FALSE GROUP BY songs.id ORDER BY count(r.id) DESC, max(r.created_at) desc";
 			rs = st.executeQuery(query);
 			int i = 0;
 			while (rs.next()) {
 				++i;
 				broadcastSongs(rs.getString("id"), broadcastId, i);
+				if(songsPerBroadcast.equals(Integer.toString(i)))
+					break;
 			}
 
-			return "Phat song ngay " + date + " lan " + Integer.toString(count);
+			broadcast = new Broadcast(broadcastId, name, date, date);
+
+			return broadcast;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 
-		return null;
+		return broadcast;
 	}
 
 	public static void main(String[] args) throws SQLException {

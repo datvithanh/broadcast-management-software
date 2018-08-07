@@ -1,3 +1,4 @@
+-- schema
 CREATE TABLE users
 (
   id         SERIAL       NOT NULL
@@ -30,7 +31,7 @@ CREATE TABLE requests
   user_id    INTEGER
     CONSTRAINT requests_user_id_foreign
     REFERENCES users,
-  song_id    INTEGER,
+  song_id    VARCHAR(255),
   resolved   BOOLEAN DEFAULT FALSE,
   created_at DATE    DEFAULT CURRENT_DATE,
   message    TEXT
@@ -60,4 +61,3 @@ CREATE TABLE broadcast_request
   order_number INTEGER NOT NULL,
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-

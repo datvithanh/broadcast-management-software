@@ -14,8 +14,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -25,18 +23,15 @@ import DTO.Broadcast;
 import DTO.Request;
 import DTO.Song;
 import DTO.User;
-import TEST.Main;
-import javafx.scene.media.Media;
-import javax.sound.sampled.*;
 
-public class NewJFrame extends javax.swing.JFrame implements ActionListener {
+public class Main extends javax.swing.JFrame implements ActionListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NewJFrame() {
+	public Main() {
 		initComponents();
 		showSongs();
 		showRequests();
@@ -60,6 +55,16 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		}
 		jTableBroadcasts.changeSelection(0, 0, false, false);
 		showBroadcastRequests(broadcastList.get(0).getId());
+	}
+	
+	public void addToBroadcast(Broadcast broadcast) {
+		DefaultTableModel model = (DefaultTableModel) jTableBroadcasts.getModel();
+		Object[] row = new Object[4];
+		row[0] = jTableBroadcasts.getRowCount() + 1;
+		row[1] = "BC" + broadcast.getId();
+		row[2] = broadcast.getName();
+		row[3] = broadcast.getCreatedAt();
+		model.addRow(row);
 	}
 
 	public void showRequestExceptions() {
@@ -151,6 +156,7 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void initComponents() {
 
 		jTabbedPane6 = new javax.swing.JTabbedPane();
@@ -943,20 +949,20 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new NewJFrame().setVisible(true);
+				new Main().setVisible(true);
 			}
 		});
 	}
@@ -1154,12 +1160,12 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 
 		if (e.getSource() == jButtonBroadCast) {
 			DataProvider dal = new DataProvider();
-			String message = dal.insertBroadcast();
-			javax.swing.JOptionPane.showMessageDialog(null, message);
+			Broadcast broadcast = dal.insertBroadcast();
+			javax.swing.JOptionPane.showMessageDialog(null, broadcast.getName());
 			showRequests();
 			showFavoriteSongs();
 			showUnresolvedSongs();
-			showBroadcasts();
+			addToBroadcast(broadcast);
 		}
 
 		if (e.getSource() == jButtonDeleteRequest) {
@@ -1189,7 +1195,12 @@ public class NewJFrame extends javax.swing.JFrame implements ActionListener {
 
 			User user = new User(jTextFieldRequester.getText(), jTextFieldRequesterPhone.getText(), "");
 			String user_id = new DataProvider().insertUser(user);
+			System.out.println(jTextFieldSongId.getText());
 			Request request = new Request(user_id, jTextFieldSongId.getText(), jTextAreaRequesterMessage.getText());
+			jTextFieldRequesterPhone.setText("");
+			jTextFieldSongId.setText("");
+			jTextFieldRequester.setText("");
+			jTextAreaRequesterMessage.setText("");
 			DataProvider dal = new DataProvider();
 			dal.insertRequest(request);
 			showRequests();
